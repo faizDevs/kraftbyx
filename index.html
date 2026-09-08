@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kraftbyx — We Forge Digital | Design, Games, Web & Apps</title>
+<meta name="description" content="Kraftbyx ek digital forge hai — logos, games, websites, apps aur interactive wallpapers, sab ek jagah forged. Craft meet code.">
+
+<!-- FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+<style>
+/* ============ KRAFTBYX BRAND SYSTEM ============ */
+:root{
+  --forge-black:#141416;
+  --graphite:#232328;
+  --graphite-2:#1B1B1F;
+  --amber:#FFA51F;
+  --molten:#FF6B1A;
+  --ash:#F2F1ED;
+  --steel:#8B8B95;
+  --green:#3EE68A;
+  --heat-gradient:linear-gradient(90deg,#232328,#FF6B1A,#FFA51F);
+  --font-display:'Anton',sans-serif;
+  --font-body:'Space Grotesk',sans-serif;
+  --font-mono:'Share Tech Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--forge-black);
+  color:var(--ash);
+  font-family:var(--font-body);
+  overflow-x:hidden;
+  cursor:none;
+}
+::selection{background:var(--amber);color:var(--forge-black)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:none}
+
+/* Blueprint grid + scanlines background */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(139,139,149,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(139,139,149,.05) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+body::after{
+  content:'';position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.4;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.15) 3px 4px);
+}
+
+/* ============ CUSTOM CURSOR ============ */
+.cursor{position:fixed;top:0;left:0;width:24px;height:24px;border:1.5px solid var(--steel);
+  border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);
+  transition:width .25s,height .25s,border-color .25s,background .25s}
+.cursor.hovered{width:44px;height:44px;border-color:var(--amber);background:rgba(255,165,31,.1)}
+@media(max-width:768px){.cursor{display:none}body,button{cursor:auto}}
+
+/* ============ SCROLL PROGRESS ============ */
+.scroll-progress{position:fixed;top:0;left:0;height:2px;width:0;
+  background:var(--heat-gradient);z-index:9998;transition:width .1s linear}
+
+/* ============ BYX SPARK (signature) ============ */
+.spark{display:inline-flex;align-items:flex-end;gap:2px;height:14px}
+.spark span{background:var(--amber);width:4px;display:inline-block}
+.spark span:nth-child(1){height:4px}
+.spark span:nth-child(2){height:8px}
+.spark span:nth-child(3){height:14px;box-shadow:0 0 8px var(--amber)}
+.spark.blink span:nth-child(3){animation:sparkblink 1s infinite}
+@keyframes sparkblink{50%{opacity:.2}}
+
+/* ============ TYPO HELPERS ============ */
+.mono{font-family:var(--font-mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--steel)}
+.mono.green{color:var(--green)}
+.mono.amber{color:var(--amber)}
+h1,h2{font-family:var(--font-display);text-transform:uppercase;line-height:1.02;letter-spacing:1px}
+.amber-text{color:var(--amber)}
+
+/* ============ PRELOADER ============ */
+#preloader{position:fixed;inset:0;background:var(--forge-black);z-index:10000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;
+  transition:opacity .5s,visibility .5s}
+#preloader.done{opacity:0;visibility:hidden}
+.pre-logo{font-family:var(--font-display);font-size:32px;letter-spacing:2px}
+.pre-bar{width:min(320px,70vw);height:6px;background:var(--graphite);border:1px solid var(--steel)}
+.pre-fill{height:100%;width:0;background:var(--heat-gradient)}
+.pre-status{font-family:var(--font-mono);font-size:12px;letter-spacing:3px;color:var(--steel)}
+
+/* ============ NAV ============ */
+nav{position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:rgba(20,20,22,.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(139,139,149,.2);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 5vw}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:22px;letter-spacing:2px}
+.logo b{font-weight:400}
+.logo .byx{color:var(--amber)}
+.nav-links{display:flex;align-items:center;gap:36px;list-style:none}
+.nav-links a{font-family:var(--font-mono);font-size:12px;letter-spacing:2px;color:var(--steel);transition:.25s}
+.nav-links a:hover{color:var(--amber)}
+.nav-links a:hover::before{content:'[';color:var(--amber)}
+.nav-links a:hover::after{content:']';color:var(--amber)}
+.btn{display:inline-flex;align-items:center;gap:10px;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:2px;text-transform:uppercase;
+  padding:12px 24px;border:1px solid var(--amber);color:var(--amber);
+  background:transparent;position:relative;overflow:hidden;transition:color .3s}
+.btn::before{content:'';position:absolute;inset:0;background:var(--heat-gradient);
+  transform:scaleX(0);transform-origin:left;transition:transform .35s;z-index:-1}
+.btn:hover{color:var(--forge-black)}
+.btn:hover::before{transform:scaleX(1)}
+.btn.solid{background:var(--amber);color:var(--forge-black)}
+.btn.solid::before{background:var(--molten)}
+.burger{display:none;background:none;border:none;flex-direction:column;gap:5px;padding:8px}
+.burger span{width:24px;height:2px;background:var(--ash);transition:.3s}
+@media(max-width:900px){
+  .nav-links{position:fixed;inset:0;background:rgba(20,20,22,.98);
+    flex-direction:column;justify-content:center;gap:32px;
+    transform:translateX(100%);transition:transform .4s}
+  .nav-links.open{transform:translateX(0)}
+  .nav-links a{font-size:16px}
+  .burger{display:flex;z-index:1001}
+  .burger.open span:nth-child(1){transform:rotate(45deg) translateY(7px)}
+  .burger.open span:nth-child(2){opacity:0}
+  .burger.open span:nth-child(3){transform:rotate(-45deg) translateY(-7px)}
+  .nav-cta{display:none}
+}
+
+/* ============ SECTION BASE ============ */
+section{position:relative;z-index:2;padding:110px 5vw}
+.section-head{margin-bottom:56px}
+.section-head .mono{display:block;margin-bottom:14px}
+.section-head h2{font-size:clamp(36px,6vw,64px)}
+.section-head p{color:var(--steel);margin-top:14px;max-width:560px;font-size:17px}
+.hud-corners{position:relative}
+.hud-corners::before,.hud-corners::after{content:'';position:absolute;width:20px;height:20px;border:1.5px solid var(--amber);pointer-events:none}
+.hud-corners::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.hud-corners::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:none}
+
+/* ============ HERO ============ */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:140px}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center;width:100%}
+.hero h1{font-size:clamp(56px,9vw,110px)}
+.hero .sub{color:var(--steel);font-size:19px;margin:26px 0 36px;max-width:520px;line-height:1.6}
+.hero-ctas{display:flex;gap:18px;flex-wrap:wrap}
+.typeline{margin-top:30px;font-family:var(--font-mono);font-size:15px;color:var(--amber);letter-spacing:1px}
+.typeline .cursor-bar{display:inline-block;width:9px;height:16px;background:var(--amber);
+  vertical-align:middle;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero-meta{position:absolute;bottom:30px;left:5vw;right:5vw;display:flex;justify-content:space-between}
+.hero-visual{display:flex;align-items:center;justify-content:center}
+.wire-cube{width:min(320px,60vw);aspect-ratio:1;position:relative;animation:float 6s ease-in-out infinite}
+.wire-cube svg{width:100%;height:100%;stroke:var(--amber);fill:none;stroke-width:1;opacity:.85;
+  filter:drop-shadow(0 0 12px rgba(255,165,31,.4))}
+.hero-particles span{position:absolute;width:5px;height:5px;background:var(--amber);opacity:.5;animation:drift 8s linear infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-24px) rotate(3deg)}}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(-120px);opacity:0}}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.hero-visual{display:none}}
+
+/* ============ MARQUEE ============ */
+.marquee{border-top:1px solid rgba(139,139,149,.25);border-bottom:1px solid rgba(139,139,149,.25);
+  overflow:hidden;padding:20px 0;position:relative;z-index:2;background:var(--graphite-2)}
+.marquee-track{display:flex;gap:48px;white-space:nowrap;animation:scrollx 28s linear infinite;width:max-content}
+.marquee-track span{font-family:var(--font-display);font-size:20px;letter-spacing:3px;
+  text-transform:uppercase;color:var(--steel);display:flex;align-items:center;gap:48px}
+@keyframes scrollx{to{transform:translateX(-50%)}}
+
+/* ============ MODULES ============ */
+.modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.module-card{background:var(--graphite);padding:34px 28px;position:relative;
+  clip-path:polygon(0 0,calc(100% - 20px) 0,100% 20px,100% 100%,0 100%);
+  border:1px solid rgba(139,139,149,.15);transition:.3s;overflow:hidden}
+.module-card:hover{border-color:var(--amber);transform:translateY(-6px);
+  box-shadow:0 12px 40px rgba(255,165,31,.12)}
+.module-card .mod-id{font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--amber);margin-bottom:18px;display:block}
+.module-card h3{font-family:var(--font-display);font-size:26px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.module-card .tags{color:var(--steel);font-size:14px;margin-bottom:16px}
+.module-card p{color:var(--steel);font-size:15px;line-height:1.6;margin-bottom:22px}
+.module-card .mod-link{font-family:var(--font-mono);font-size:12px;letter-spacing:2px;color:var(--ash);transition:.25s}
+.module-card:hover .mod-link{color:var(--amber)}
+.mod-icon{font-size:26px;margin-bottom:16px;display:block}
+.badge{position:absolute;top:16px;right:26px;background:var(--amber);color:var(--forge-black);
+  font-family:var(--font-mono);font-size:10px;letter-spacing:2px;padding:4px 10px}
+@media(max-width:1000px){.modules-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.modules-grid{grid-template-columns:1fr}}
+
+/* ============ WORK ============ */
+.filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:40px}
+.filter-btn{font-family:var(--font-mono);font-size:12px;letter-spacing:2px;
+  background:transparent;border:1px solid var(--steel);color:var(--steel);
+  padding:9px 18px;transition:.25s}
+.filter-btn:hover{border-color:var(--amber);color:var(--amber)}
+.filter-btn.active{background:var(--amber);border-color:var(--amber);color:var(--forge-black)}
+.work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.work-card{position:relative;overflow:hidden;background:var(--graphite);border:1px solid rgba(139,139,149,.15)}
+.work-thumb{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;
+  position:relative;transition:transform .5s}
+.work-card:hover .work-thumb{transform:scale(1.04)}
+.work-thumb .proj-name{font-family:var(--font-display);font-size:clamp(28px,4vw,44px);
+  color:rgba(242,241,237,.9);letter-spacing:2px;text-transform:uppercase}
+.work-overlay{position:absolute;inset:0;background:rgba(20,20,22,.82);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  opacity:0;transition:.35s}
+.work-card:hover .work-overlay{opacity:1}
+.work-info{display:flex;justify-content:space-between;align-items:center;padding:16px 20px}
+.work-info .wname{font-family:var(--font-display);font-size:18px;letter-spacing:1px;text-transform:uppercase}
+.work-info .wtags{font-family:var(--font-mono);font-size:11px;letter-spacing:2px;color:var(--steel)}
+.work-card.hide{display:none}
+@media(max-width:800px){.work-grid{grid-template-columns:1fr}}
+/* thumbnail gradients */
+.g1{background:linear-gradient(135deg,#FF6B1A,#7A2E0E)}
+.g2{background:linear-gradient(135deg,#2d5bff,#0e1a4d)}
+.g3{background:linear-gradient(135deg,#FFA51F,#4d350e)}
+.g4{background:linear-gradient(135deg,#3EE68A,#0e3d26)}
+.g5{background:linear-gradient(135deg,#b84dff,#2e0e4d)}
+.g6{background:linear-gradient(135deg,#ff4d88,#4d0e24)}
+
+/* ============ PROCESS ============ */
+.forge-line{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;position:relative;margin-top:20px}
+.forge-line::before{content:'';position:absolute;top:28px;left:0;right:0;height:2px;background:var(--graphite)}
+.forge-line::after{content:'';position:absolute;top:28px;left:0;width:0;height:2px;background:var(--heat-gradient);transition:width 1.6s ease}
+.forge-line.filled::after{width:100%}
+.step{position:relative;padding-top:64px}
+.step .dot{position:absolute;top:18px;left:0;width:22px;height:22px;background:var(--forge-black);
+  border:2px solid var(--amber);display:flex;align-items:center;justify-content:center}
+.step .dot i{width:8px;height:8px;background:var(--amber)}
+.step h3{font-family:var(--font-display);font-size:24px;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase}
+.step h3 em{font-style:normal;color:var(--amber);margin-right:8px}
+.step p{color:var(--steel);font-size:14px;line-height:1.6;margin-bottom:14px}
+.step .dur{font-family:var(--font-mono);font-size:11px;letter-spacing:2px;color:var(--green)}
+@media(max-width:800px){.forge-line{grid-template-columns:1fr}.forge-line::before,.forge-line::after{display:none}}
+
+/* ============ STATS ============ */
+.stats{background:var(--graphite-2);border-top:1px solid rgba(139,139,149,.2);border-bottom:1px solid rgba(139,139,149,.2)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat b{font-family:var(--font-display);font-size:clamp(36px,5vw,56px);color:var(--amber);display:block;letter-spacing:1px}
+.stat span{font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--steel);text-transform:uppercase}
+@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+
+/* ============ TESTIMONIALS ============ */
+.signals{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.signal-card{background:var(--graphite);border:1px solid rgba(139,139,149,.15);padding:30px;transition:.3s}
+.signal-card:hover{border-color:var(--amber);transform:translateY(-4px)}
+.signal-card .stars{color:var(--amber);letter-spacing:4px;margin-bottom:16px}
+.signal-card p{color:var(--ash);font-size:15px;line-height:1.7;margin-bottom:20px;font-style:italic}
+.signal-card .who{font-family:var(--font-display);font-size:15px;letter-spacing:1px;text-transform:uppercase}
+.signal-card .verified{display:block;margin-top:8px;font-family:var(--font-mono);font-size:10px;letter-spacing:2px;color:var(--green)}
+@media(max-width:900px){.signals{grid-template-columns:1fr}}
+
+/* ============ CTA + CONTACT ============ */
+.cta-section{text-align:center;background:
+  radial-gradient(ellipse at center,rgba(255,107,26,.12),transparent 60%)}
+.cta-section h2{font-size:clamp(44px,8vw,88px)}
+.cta-section .cursor-bar{display:inline-block;width:14px;height:.85em;background:var(--amber);animation:blink 1s steps(1) infinite;vertical-align:baseline}
+.contact-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:40px;margin-top:70px;text-align:left}
+.contact-form{background:var(--graphite);padding:36px;border:1px solid rgba(139,139,149,.15)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.field{margin-bottom:18px}
+.field label{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:2px;color:var(--steel);margin-bottom:8px;text-transform:uppercase}
+.field input,.field select,.field textarea{width:100%;background:var(--forge-black);
+  border:1px solid var(--steel);color:var(--ash);padding:13px 14px;font-family:var(--font-body);font-size:15px;transition:.25s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 1px var(--amber)}
+.field textarea{min-height:110px;resize:vertical}
+.form-success{display:none;margin-top:16px;font-family:var(--font-mono);font-size:13px;color:var(--green);letter-spacing:1px}
+.info-panel .block{border:1px solid rgba(139,139,149,.15);background:var(--graphite-2);padding:26px;margin-bottom:20px}
+.info-panel h4{font-family:var(--font-mono);font-size:12px;letter-spacing:3px;color:var(--amber);margin-bottom:14px;text-transform:uppercase}
+.info-panel p{color:var(--steel);font-size:14px;line-height:1.8}
+.info-panel .status-dot{display:inline-block;width:8px;height:8px;background:var(--green);border-radius:50%;margin-right:8px;animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.faq{max-width:800px;margin:80px auto 0}
+.faq-item{border:1px solid rgba(139,139,149,.2);margin-bottom:12px;background:var(--graphite)}
+.faq-q{width:100%;background:none;border:none;color:var(--ash);text-align:left;
+  font-family:var(--font-mono);font-size:13px;letter-spacing:1px;padding:20px 24px;display:flex;justify-content:space-between;align-items:center}
+.faq-q::after{content:'+';color:var(--amber);font-size:18px}
+.faq-item.open .faq-q::after{content:'−'}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s;color:var(--steel);font-size:15px;line-height:1.7}
+.faq-a p{padding:0 24px 20px}
+@media(max-width:900px){.contact-wrap{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid rgba(139,139,149,.25);background:var(--graphite-2);
+  padding:60px 5vw 30px;position:relative;z-index:2}
+.footer-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;margin-bottom:40px}
+.footer-status{font-family:var(--font-mono);font-size:12px;letter-spacing:2px;color:var(--green)}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin-bottom:40px}
+.footer-grid h5{font-family:var(--font-mono);font-size:11px;letter-spacing:3px;color:var(--amber);margin-bottom:16px;text-transform:uppercase}
+.footer-grid a,.footer-grid span{display:block;color:var(--steel);font-size:14px;margin-bottom:10px;transition:.25s}
+.footer-grid a:hover{color:var(--amber)}
+.footer-bottom{border-top:1px solid rgba(139,139,149,.15);padding-top:24px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+@media(max-width:800px){.footer-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<!-- ===== PRELOADER ===== -->
+<div id="preloader">
+  <div class="pre-logo">KRAFT<span style="color:var(--amber)">BYX</span></div>
+  <div class="pre-bar"><div class="pre-fill" id="preFill"></div></div>
+  <div class="pre-status" id="preStatus">FORGING ENVIRONMENT... 0%</div>
+</div>
+
+<!-- ===== CURSOR + PROGRESS ===== -->
+<div class="cursor" id="cursor"></div>
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <a href="#home" class="logo"><b>KRAFT</b><b class="byx">BYX</b>
+    <span class="spark blink"><span></span><span></span><span></span></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#modules">[01] MODULES</a></li>
+    <li><a href="#work">[02] WORK</a></li>
+    <li><a href="#process">[03] FORGE LINE</a></li>
+    <li><a href="#contact">[04] CONTACT</a></li>
+  </ul>
+  <a href="#contact" class="btn nav-cta">▸ IGNITE PROJECT</a>
+  <button class="burger" id="burger" aria-label="menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div>
+      <span class="mono green">> SYSTEM ONLINE — FORGE ACTIVE_</span>
+      <h1 style="margin-top:18px">WE FORGE<br><span class="amber-text">DIGITAL</span></h1>
+      <div class="typeline">> <span id="typewriter"></span><span class="cursor-bar"></span></div>
+      <p class="sub">Design se lekar games tak — har pixel crafted, har byte forged. Ek studio, infinite creations.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn solid">🔥 IGNITE PROJECT</a>
+        <a href="#work" class="btn">VIEW THE FORGE</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="wire-cube">
+        <svg viewBox="0 0 200 200">
+          <rect x="50" y="50" width="100" height="100"/>
+          <rect x="80" y="20" width="100" height="100"/>
+          <rect x="20" y="80" width="100" height="100"/>
+          <line x1="50" y1="50" x2="80" y2="20"/><line x1="150" y1="50" x2="180" y2="20"/>
+          <line x1="50" y1="150" x2="20" y2="180"/><line x1="150" y1="150" x2="180" y2="120"/>
+        </svg>
+        <div class="hero-particles">
+          <span style="left:10%;bottom:20%;animation-delay:0s"></span>
+          <span style="left:40%;bottom:10%;animation-delay:2s"></span>
+          <span style="left:70%;bottom:25%;animation-delay:4s"></span>
+          <span style="left:90%;bottom:15%;animation-delay:1s"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-meta">
+    <span class="mono">SCROLL TO EXPLORE ↓</span>
+    <span class="mono">EST. 2025 · MADE IN INDIA · V2.0</span>
+  </div>
+</section>
+
+<!-- ===== MARQUEE ===== -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>LOGOS ▪ TYPOGRAPHY ▪ BANNERS ▪ GAMES ▪ WEBSITES ▪ APPS ▪ INTERACTIVE WALLPAPERS ▪ BRAND GRAPHICS ▪</span>
+    <span>LOGOS ▪ TYPOGRAPHY ▪ BANNERS ▪ GAMES ▪ WEBSITES ▪ APPS ▪ INTERACTIVE WALLPAPERS ▪ BRAND GRAPHICS ▪</span>
+  </div>
+</div>
+
+<!-- ===== MODULES ===== -->
+<section id="modules">
+  <div class="section-head reveal">
+    <span class="mono amber">> LOADING: MODULES_</span>
+    <h2>FIVE FORGES. <span class="amber-text">ONE STUDIO.</span></h2>
+    <p>Jo bhi banana hai — yahan forge hota hai.</p>
+  </div>
+  <div class="modules-grid">
+    <div class="module-card reveal">
+      <span class="mod-id">MOD.01 // DESIGN FORGE</span>
+      <span class="mod-icon">✒️</span>
+      <h3>Design Forge</h3>
+      <div class="tags">Logo · Typography · Banners · Brand Graphics</div>
+      <p>Pehli nazar mein brand banao. From logotype to letterform — har design precision se forged.</p>
+      <a href="#contact" class="mod-link">[EXPLORE MOD.01 →]</a>
+    </div>
+    <div class="module-card reveal">
+      <span class="mod-id">MOD.02 // GAME FORGE</span>
+      <span class="mod-icon">🎮</span>
+      <h3>Game Forge</h3>
+      <div class="tags">PC Games · Mobile Games · Interactive Experiences</div>
+      <p>Khelna hi kyun, khilana bhi. Casual se core tak — games jo players ko wapas laayein.</p>
+      <a href="#contact" class="mod-link">[EXPLORE MOD.02 →]</a>
+    </div>
+    <div class="module-card reveal">
+      <span class="mod-id">MOD.03 // WEB FORGE</span>
+      <span class="mod-icon">🌐</span>
+      <h3>Web Forge</h3>
+      <div class="tags">Websites · E-commerce · Landing Pages</div>
+      <p>Sirf website nahi — digital HQ. Fast, responsive, aur memorable.</p>
+      <a href="#contact" class="mod-link">[EXPLORE MOD.03 →]</a>
+    </div>
+    <div class="module-card reveal">
+      <span class="mod-id">MOD.04 // APP FORGE</span>
+      <span class="mod-icon">📱</span>
+      <h3>App Forge</h3>
+      <div class="tags">Mobile Apps · Desktop Software</div>
+      <p>Idea se install button tak. Cross-platform apps jo chalein — har device pe.</p>
+      <a href="#contact" class="mod-link">[EXPLORE MOD.04 →]</a>
+    </div>
+    <div class="module-card reveal">
+      <span class="badge">★ MOST UNIQUE</span>
+      <span class="mod-id">MOD.05 // LIVE WALLS</span>
+      <span class="mod-icon">🖥️</span>
+      <h3>Live Walls</h3>
+      <div class="tags">PC Interactive Wallpapers</div>
+      <p>Desktop ko zinda karo. Interactive, animated wallpapers — aapka screen, aapka universe.</p>
+      <a href="#contact" class="mod-link">[EXPLORE MOD.05 →]</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WORK ===== -->
+<section id="work">
+  <div class="section-head reveal">
+    <span class="mono amber">> LOADING: FORGED PROJECTS_</span>
+    <h2>FRESH FROM <span class="amber-text">THE FORGE</span></h2>
+  </div>
+  <div class="filters reveal">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="design">DESIGN</button>
+    <button class="filter-btn" data-filter="games">GAMES</button>
+    <button class="filter-btn" data-filter="web">WEB</button>
+    <button class="filter-btn" data-filter="apps">APPS</button>
+    <button class="filter-btn" data-filter="walls">WALLS</button>
+  </div>
+  <div class="work-grid">
+    <div class="work-card reveal" data-cat="games">
+      <div class="work-thumb g1"><span class="proj-name">NEON DRIFT</span>
+        <div class="work-overlay"><span class="mono amber">[VIEW CASE ↗]</span></div>
+      </div>
+      <div class="work-info"><span class="wname">Neon Drift</span><span class="wtags">GAME · UNITY · 2025</span></div>
+    </div>
+    <div class="work-card reveal" data-cat="design">
+      <div class="work-thumb g2"><span class="proj-name">CAFÉ AROMA</span>
+        <div class="work-overlay"><span class="mono amber">[VIEW CASE ↗]</span></div>
+      </div>
+      <div class="work-info"><span class="wname">Café Aroma</span><span class="wtags">BRAND · DESIGN · 2025</span></div>
+    </div>
+    <div class="work-card reveal" data-cat="walls">
+      <div class="work-thumb g3"><span class="proj-name">CIRCUIT PULSE</span>
+        <div class="work-overlay"><span class="mono amber">[VIEW CASE ↗]</span></div>
+      </div>
+      <div class="work-info"><span class="wname">Circuit Pulse</span><span class="wtags">WALLPAPER PACK · 2025</span></div>
+    </div>
+    <div class="work-card reveal" data-cat="apps">
+      <div class="work-thumb g4"><span class="proj-name">TASKFORGE</span>
+        <div class="work-overlay"><span class="mono amber">[VIEW CASE ↗]</span></div>
+      </div>
+      <div class="work-info"><span class="wname">TaskForge</span><span class="wtags">DESKTOP APP · 2025</span></div>
+    </div>
+    <div class="work-card reveal" data-cat="web">
+      <div class="work-thumb g5"><span class="proj-name">LUMEN STORE</span>
+        <div class="work-overlay"><span class="mono amber">[VIEW CASE ↗]</span></div>
+      </div>
+      <div class="work-info"><span class="wname">Lumen Store</span><span class="wtags">E-COMMERCE · 2025</span></div>
+    </div>
+    <div class="work-card reveal" data-cat="design">
+      <div class="work-thumb g6"><span class="proj-name">TYPE KRAFT</span>
+        <div class="work-overlay"><span class="mono amber">[VIEW CASE ↗]</span></div>
+      </div>
+      <div class="work-info"><span class="wname">Type Kraft</span><span class="wtags">TYPOGRAPHY · 2025</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROCESS ===== -->
+<section id="process">
+  <div class="section-head reveal">
+    <span class="mono amber">> LOADING: PROCESS_</span>
+    <h2>HOW THE <span class="amber-text">FORGE</span> WORKS</h2>
+    <p>Idea se delivery tak — 4 steps, zero confusion.</p>
+  </div>
+  <div class="forge-line" id="forgeLine">
+    <div class="step reveal">
+      <div class="dot"><i></i></div>
+      <h3><em>01</em>Ignite</h3>
+      <p>We listen. Aapka idea, goals, audience — sab samajhte hain. Ek cup chai, poori clarity.</p>
+      <span class="dur">DURATION: 1–2 DAYS</span>
+    </div>
+    <div class="step reveal">
+      <div class="dot"><i></i></div>
+      <h3><em>02</em>Heat</h3>
+      <p>Research + concepts + prototypes. Design direction lock hoti hai yahin.</p>
+      <span class="dur">DURATION: 3–7 DAYS</span>
+    </div>
+    <div class="step reveal">
+      <div class="dot"><i></i></div>
+      <h3><em>03</em>Forge</h3>
+      <p>Actual build — design, code, development. Daily progress updates.</p>
+      <span class="dur">DURATION: PROJECT-BASED</span>
+    </div>
+    <div class="step reveal">
+      <div class="dot"><i></i></div>
+      <h3><em>04</em>Ship</h3>
+      <p>Testing, polish, delivery + post-launch support. Project close nahi hota, complete hota hai.</p>
+      <span class="dur">DURATION: 1–3 DAYS</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+  <div class="stats-grid">
+    <div class="stat reveal"><b><span class="counter" data-target="12">0</span>+</b><span>Projects Forged</span></div>
+    <div class="stat reveal"><b><span class="counter" data-target="8">0</span>+</b><span>Happy Clients</span></div>
+    <div class="stat reveal"><b><span class="counter" data-target="50">0</span>K+</b><span>Lines of Code</span></div>
+    <div class="stat reveal"><b><span class="counter" data-target="100">0</span>%</b><span>On-Time Delivery</span></div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section>
+  <div class="section-head reveal">
+    <span class="mono amber">> RECEIVING SIGNALS_</span>
+    <h2>WHAT CLIENTS <span class="amber-text">TRANSMIT</span></h2>
+  </div>
+  <div class="signals">
+    <div class="signal-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Logo se website tak — sab kuch ek jagah mil gaya. Kraftbyx ne humare brand ko game bana diya."</p>
+      <div class="who">— Rahul S., Café Aroma</div>
+      <span class="verified">[TRANSMISSION: VERIFIED ✓]</span>
+    </div>
+    <div class="signal-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Interactive wallpaper ne mera desktop transform kar diya. Dikhane ke liye bhi, kaam ke liye bhi."</p>
+      <div class="who">— Aman K., Wallpaper Client</div>
+      <span class="verified">[TRANSMISSION: VERIFIED ✓]</span>
+    </div>
+    <div class="signal-card reveal">
+      <div class="stars">★★★★★</div>
+      <p>"Timeline pe delivery, aur quality expected se upar. Forge Line process genuinely kaam karta hai."</p>
+      <div class="who">— Priya M., Startup Founder</div>
+      <span class="verified">[TRANSMISSION: VERIFIED ✓]</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA + CONTACT ===== -->
+<section class="cta-section" id="contact">
+  <div class="reveal">
+    <span class="mono amber" style="display:block;margin-bottom:16px">> OPEN CHANNEL: TRANSMISSION READY_</span>
+    <h2>READY TO <span class="amber-text">FORGE?</span><span class="cursor-bar"></span></h2>
+    <p style="color:var(--steel);margin:20px 0 40px">Ek message hai bas. Baaki hum sambhal lenge.</p>
+  </div>
+  <div class="contact-wrap">
+    <form class="contact-form hud-corners reveal" id="contactForm">
+      <div class="form-row">
+        <div class="field"><label>> Your Name_</label><input type="text" required placeholder="Rohan Sharma"></div>
+        <div class="field"><label>> Email_</label><input type="email" required placeholder="you@email.com"></div>
+      </div>
+      <div class="form-row">
+        <div class="field"><label>> Module Needed_</label>
+          <select><option>MOD.01 Design Forge</option><option>MOD.02 Game Forge</option>
+          <option>MOD.03 Web Forge</option><option>MOD.04 App Forge</option>
+          <option>MOD.05 Live Walls</option><option>Other / Multiple</option></select>
+        </div>
+        <div class="field"><label>> Budget Range_</label>
+          <select><option>< ₹10K</option><option>₹10K – 50K</option><option>₹50K+</option><option>Let's Discuss</option></select>
+        </div>
+      </div>
+      <div class="field"><label>> Project Brief_</label><textarea placeholder="Apna idea yahan describe karo..."></textarea></div>
+      <button type="submit" class="btn solid">🔥 TRANSMIT MESSAGE</button>
+      <div class="form-success" id="formSuccess">> TRANSMISSION RECEIVED_ ✓ We'll respond within 24 hours.</div>
+    </form>
+    <div class="info-panel">
+      <div class="block reveal">
+        <h4>▸ Direct Lines</h4>
+        <p>EMAIL: hello@kraftbyx.com<br>WHATSAPP: +91-XXXXXXXXXX</p>
+      </div>
+      <div class="block reveal">
+        <h4>▸ Working Hours</h4>
+        <p>MON–SAT: 10:00 – 19:00 IST<br><span class="status-dot"></span>STATUS: ACCEPTING PROJECTS</p>
+      </div>
+      <div class="block reveal">
+        <h4>▸ Base</h4>
+        <p>INDIA · REMOTE-FIRST<br>Working globally 🌍</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq reveal">
+    <div class="faq-item">
+      <button class="faq-q">> Q: Project start hone mein kitna time lagta hai?</button>
+      <div class="faq-a"><p>Brief finalize hone ke 48 hours ke andar kickstart hota hai.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">> Q: Revisions milte hain?</button>
+      <div class="faq-a"><p>Haan — har package mein defined revision rounds included hain.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">> Q: Payment terms kya hain?</button>
+      <div class="faq-a"><p>50% advance, 50% delivery pe. Bade projects ke liye milestone payments.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">> Q: Sirf design chahiye, dev nahi?</button>
+      <div class="faq-a"><p>Bilkul. Har module standalone available hai — mix bhi kar sakte ho.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-top">
+    <a href="#home" class="logo"><b>KRAFT</b><b class="byx">BYX</b>
+      <span class="spark"><span></span><span></span><span></span></span>
+    </a>
+    <span class="mono">WE FORGE DIGITAL_</span>
+    <span class="footer-status">● ALL SYSTEMS OPERATIONAL</span>
+  </div>
+  <div class="footer-grid">
+    <div>
+      <h5>Sitemap</h5>
+      <a href="#home">Home</a><a href="#modules">Modules</a><a href="#work">Work</a><a href="#contact">Contact</a>
+    </div>
+    <div>
+      <h5>Modules</h5>
+      <span>Design Forge</span><span>Game Forge</span><span>Web Forge</span><span>App Forge</span><span>Live Walls</span>
+    </div>
+    <div>
+      <h5>Socials</h5>
+      <a href="#">Instagram</a><a href="#">YouTube</a><a href="#">X / Twitter</a><a href="#">LinkedIn</a><a href="#">Discord</a>
+    </div>
+    <div>
+      <h5>Status</h5>
+      <span>V2.0.1</span><span>© 2025 Kraftbyx</span><span>IND · EN/HI</span><span style="color:var(--green)">● ONLINE</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="mono">> ALL SYSTEMS OPERATIONAL_</span>
+    <span class="mono">PRIVACY · TERMS</span>
+  </div>
+</footer>
+
+<script>
+/* ===== PRELOADER ===== */
+let pre=0;
+const preFill=document.getElementById('preFill'),preStatus=document.getElementById('preStatus');
+const preInt=setInterval(()=>{
+  pre=Math.min(100,pre+Math.random()*18);
+  preFill.style.width=pre+'%';
+  preStatus.textContent='FORGING ENVIRONMENT... '+Math.floor(pre)+'%';
+  if(pre>=100){clearInterval(preInt);
+    setTimeout(()=>document.getElementById('preloader').classList.add('done'),400);}
+},150);
+
+/* ===== CUSTOM CURSOR ===== */
+const cursor=document.getElementById('cursor');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';});
+document.querySelectorAll('a,button,.work-card,.module-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cursor.classList.add('hovered'));
+  el.addEventListener('mouseleave',()=>cursor.classList.remove('hovered'));
+});
+
+/* ===== SCROLL PROGRESS ===== */
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  document.getElementById('scrollProgress').style.width=
+    (h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  /* forge line fill */
+  const fl=document.getElementById('forgeLine');
+  if(fl.getBoundingClientRect().top<window.innerHeight*0.7)fl.classList.add('filled');
+});
+
+/* ===== MOBILE MENU ===== */
+const burger=document.getElementById('burger'),navLinks=document.getElementById('navLinks');
+burger.addEventListener('click',()=>{burger.classList.toggle('open');navLinks.classList.toggle('open');});
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  burger.classList.remove('open');navLinks.classList.remove('open');}));
+
+/* ===== TYPEWRITER ===== */
+const words=['logos_','games_','websites_','apps_','wallpapers_','everything_'];
+const tw=document.getElementById('typewriter');
+let wi=0,ci=0,deleting=false;
+function type(){
+  const w=words[wi];
+  tw.textContent=w.substring(0,ci);
+  if(!deleting&&ci<w.length){ci++;setTimeout(type,90);}
+  else if(!deleting){deleting=true;setTimeout(type,1400);}
+  else if(ci>0){ci--;setTimeout(type,40);}
+  else{deleting=false;wi=(wi+1)%words.length;setTimeout(type,300);}
+}
+type();
+
+/* ===== SCROLL REVEAL ===== */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ===== COUNTERS ===== */
+const cObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target,target=+el.dataset.target;let cur=0;
+    const step=Math.max(1,Math.floor(target/60));
+    const int=setInterval(()=>{cur+=step;
+      if(cur>=target){cur=target;clearInterval(int);}
+      el.textContent=cur;},30);
+    cObs.unobserve(el);
+  });
+},{threshold:0.5});
+document.querySelectorAll('.counter').forEach(el=>cObs.observe(el));
+
+/* ===== WORK FILTER ===== */
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f=btn.dataset.filter;
+    document.querySelectorAll('.work-card').forEach(card=>{
+      card.classList.toggle('hide',f!=='all'&&card.dataset.cat!==f);
+    });
+  });
+});
+
+/* ===== FAQ ===== */
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement,a=item.querySelector('.faq-a');
+    const open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i=>{i.classList.remove('open');i.querySelector('.faq-a').style.maxHeight=null;});
+    if(!open){item.classList.add('open');a.style.maxHeight=a.scrollHeight+'px';}
+  });
+});
+
+/* ===== FORM ===== */
+document.getElementById('contactForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  document.getElementById('formSuccess').style.display='block';
+  e.target.reset();
+});
+</script>
+</body>
+</html>
