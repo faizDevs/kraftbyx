@@ -1,0 +1,30 @@
+# Kraftbyx
+
+> Kraftbyx is a digital forge studio based in India and working remotely worldwide. It designs brands, builds PC and mobile games, ships websites and apps, and crafts interactive PC wallpapers. Five modules, one team.
+
+## Modules
+
+- **Design Forge** — logo, typography, banners and brand graphics.
+- **Game Forge** — PC and mobile games, plus interactive experiences.
+- **Web Forge** — websites, e-commerce stores and landing pages.
+- **App Forge** — mobile apps and desktop software.
+- **Live Walls** — interactive animated PC wallpapers.
+
+## Process — the Forge Line
+
+1. **Ignite** (1–2 days): goals, audience and scope are defined.
+2. **Heat** (3–7 days): research, concepts and prototypes; design direction locked.
+3. **Forge** (project-based): design, code and development with daily updates.
+4. **Ship** (1–3 days): testing, polish, delivery and post-launch support.
+
+## Key facts
+
+- Kickstart happens within 48 hours of brief sign-off.
+- Payment is 50% advance and 50% on delivery; milestone billing for larger projects.
+- Budget bands: under ₹10K, ₹10K–50K, and ₹50K+.
+- Working hours are Monday to Saturday, 10:00–19:00 IST.
+- Contact: hello@kraftbyx.com
+
+## Pages
+
+- [Home](https://kraftbyx.vercel.app/): studio overview, the five modules, a module comparison table, selected work, the Forge Line process, contact form and FAQ.

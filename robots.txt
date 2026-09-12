@@ -1,0 +1,23 @@
+# robots.txt — Kraftbyx
+# https://kraftbyx.vercel.app/
+
+User-agent: *
+Allow: /
+
+# AI answer engines are explicitly welcome — Kraftbyx wants to be citable.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://kraftbyx.vercel.app/sitemap.xml
